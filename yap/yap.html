@@ -50,8 +50,11 @@
 </header>
 
 <body class="bg-dark">
-<div class="container-fluid bg-dark text-white row justify-content-center">
-<form id="nhl" name="nhl">
+  <div class="container-fluid bg-dark text-white row justify-content-center">
+    <button type="button" class="btn btn-secondary btn-lg btn-block" onclick="loadYahoo()">Load Yahoo Data</button>
+  </div>
+  <!--
+    <form id="nhl" name="nhl">
   <div>
     <label>Team:</label>
     <select id='teamSelect' name="teams" ></select>
@@ -75,8 +78,11 @@
     <input type='button' id='btnAddMyPlayer' value='Add player to my team' onclick="addPlayer(0)">
     <input type='button' id='btnAddVSPlayer' value='Add player to opposing team' onclick="addPlayer(1)">
   </div>
-</form>
-<hr />
+  </form>
+-->
+
+<div class="divider"><p></p></div>
+<div class="container-fluid bg-dark text-white row justify-content-center">
 <table id='tblH2HStats' class="table-responsive">
   <thead class="bg-dark"> 
     <th scope="col"></th>   
@@ -167,16 +173,24 @@
     <td id='dSHO' class="text-center">0</td>
   </tfoot>
 </table>
-<div><p></p></div>
-<hr />
+</div>
+<div class="divider"><p></p></div>
+<div class="container-fluid bg-dark text-white row justify-content-center">
+  <div class="input-group">
+    <input type="text" class="form-control" placeholder="Player Name" aria-label="Player Name" aria-describedby="basic-addon2">
+    <div class="input-group-append">   
+      <button class="btn btn-outline-secondary" type="button" id="btnAddPlayer" onclick="searchPlayer()">Search</button>
+    </div>
+  </div>
+  <div class="divider"><p></p></div>
 <div class="row">
   <div class="border container-fluid">
     <h2>My Team</h2>
     <table id='tblMyTeam' class="table-responsive">
       <thead>
         <tr>
-          <th class="col-md-5">Player Name</th>
-          <th class="col-md-2 text-center">Games Left</th>
+          <th class="col-md-5">Player</th>
+          <th class="col-md-2 text-center">Games</th>
           <th></th>
         </tr>
       </thead>
@@ -187,8 +201,8 @@
     <table id='tblVSTeam' class="table-responsive">
       <thead>
         <tr>
-          <th class="col-md-5">Player Name</th>
-          <th class="col-md-2 text-center">Games Left</th>
+          <th class="col-md-5">Player</th>
+          <th class="col-md-2 text-center">Games</th>
           <th></th>
         </tr>
       </thead>

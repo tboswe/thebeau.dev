@@ -3,6 +3,10 @@ const nhlapi = {
   baseUrl: 'https://statsapi.web.nhl.com/api/v1'
 };
 
+const yapapi = {
+
+}
+
 //my roster, opponent roster, HAS member array of [player, gamesLeft, avgStats]
 let myRoster = new Object(), opponentRoster = new Object();
 myRoster = {
@@ -263,12 +267,10 @@ const populateSelect = (select, data, keyFn, textFn) => {
 const populateSeasons = (select) => {
   const year = new Date().getUTCFullYear();
   let month = new Date().getMonth();
-  let adjustment = 0;
-  if(Number(month)>8){adjustment = 1;};
 
-    const seasons = new Array(50).fill('').map((_, index) => ({
-      start: year - index - 1 + adjustment,
-      end: year - index + adjustment
+  const seasons = new Array(50).fill('').map((_, index) => ({
+      start: year - index,
+      end: year - index + 1
    }));
   
   return populateSelect(select, seasons,
@@ -528,23 +530,9 @@ const removePlayer = async(manager, btn) => {
   updateScoreboard();
 }
 
-//python stuff
-function goPython(){
-  $.ajax({
-    url: "MYSCRIPT.py",
-    context: document.body
-  }).done(function() {
-    alert('finished python script');;
-  });
-}
-
-
 const main = async () => {
-  const nhl = document.forms['nhl'];
-  const teamSelect = nhl['teams'];
-  const playerSelect = nhl['roster'];
-  const seasonSelect = nhl['season'];
-
+  
+  /*
   //DATE
   //consider setting drop down with preset weeks to avoid a whole bunch of error trapping
   //also consider throwing a lot of this in a function
@@ -609,6 +597,7 @@ const main = async () => {
   triggerEvent(teamSelect, 'change');
 
   postData('data to process');
+  */
 };
 
 main();
