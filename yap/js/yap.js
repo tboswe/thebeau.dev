@@ -423,7 +423,12 @@ const loadYahoo = async() => {
 }
 
 const main = async () => {
+  //check how we got here
+  console.log(window.performance.navigation.type)
 
+  //if fresh load, enable yahoo load button
+    //load button is pressed, auth flow starts
+  //if redirect, extract code, call get_token on api...
 };
 
 main();
