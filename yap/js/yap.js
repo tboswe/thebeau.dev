@@ -4,7 +4,7 @@ const nhlapi = {
 };
 
 const yapapi = {
-
+  baseUrl: 'https://yapapi.thebeau.ca'
 }
 
 //my roster, opponent roster, HAS member array of [player, gamesLeft, avgStats]
@@ -197,54 +197,6 @@ const updateScoreboard = async(e) => {
     opponentRow.cells[0].innerHTML=opponentScore;
 };
 
-//port this into updateScoreboard
-/*
-const resetScore = async(e) => {
-  var cells = document.getElementsByTagName('td');
-  let myScore=0, opponentScore=0;
-
-  for(let i=2;i<19;i++){
-    if(Number(cells[i].innerHTML) > Number(cells[i+19].innerHTML)){
-      myScore++;
-      cells[i].setAttribute('style', 'background-color: green !important');
-      cells[i+19].setAttribute('style', 'background-color: black');
-    }
-    else if(Number(cells[i].innerHTML) < Number(cells[i+19].innerHTML)){
-      opponentScore++;
-      cells[i].setAttribute('style', 'background-color: black');
-      cells[i+19].setAttribute('style', 'background-color: green !important');
-    }
-    else{
-      cells[i].setAttribute('style', 'background-color: black');
-      cells[i+19].setAttribute('style', 'background-color: black');
-    }
-  }
-  //goals against average only exception, so reset
-  if(Number(cells[15].innerHTML) > Number(cells[34].innerHTML)){
-    myScore--, opponentScore++;
-    cells[15].setAttribute('style', 'background-color: black');
-    cells[34].setAttribute('style', 'background-color: green !important');
-  }
-  else if(Number(cells[15].innerHTML) < Number(cells[34].innerHTML)){
-    myScore++, opponentScore--;
-    cells[15].setAttribute('style', 'background-color: green !important');
-    cells[34].setAttribute('style', 'background-color: black');
-  }
-  //if goals against becomes 0, it doesn't count
-  if(Number(cells[15].innerHTML) == 0){
-    //myScore--; not sure this is correct
-    cells[15].setAttribute('style', 'background-color: black');
-  }
-  if(Number(cells[34].innerHTML) == 0){
-    //opponentScore--; not sure this is correct
-    cells[34].setAttribute('style', 'background-color: black');
-  }
-  cells[0].innerHTML=myScore;
-  cells[19].innerHTML=opponentScore;
-  //currently doesn't handle one guy having a GAA and the other having 0, so giving the guy that has a goalie a point....but really....not really a scenario that will happen
-}
-*/
-
 const triggerEvent = (el, eventName) => {
   const event = document.createEvent('HTMLEvents');
   event.initEvent(eventName, true, false);
@@ -257,34 +209,7 @@ const emptySelect = (select) => {
   }
 };
 
-const populateSelect = (select, data, keyFn, textFn) => {
-  emptySelect(select);
-  data.forEach(item =>
-    select.add(new Option(textFn(item), keyFn(item))));
-  return select;
-};
-
-const populateSeasons = (select) => {
-  const year = new Date().getUTCFullYear();
-  let month = new Date().getMonth();
-
-  const seasons = new Array(50).fill('').map((_, index) => ({
-      start: year - index,
-      end: year - index + 1
-   }));
-  
-  return populateSelect(select, seasons,
-    season => `${season.start}${season.end}`,
-    season => `${season.start} - ${season.end}`);
-};
-
-const fetchTeams = async () => {
-  const response = await fetch(`${nhlapi.baseUrl}/teams`);
-  const json = await response.json();
-  return json.teams.sort((a, b) =>
-    a.name.localeCompare(b.name));
-};
-
+//requires redesign to accept new parameters, we can keep the nhl api call or see if yahoo can provide the info
 const fetchSchedule = async (teamId) => {
   const startDate = document.getElementById('startDate').value;
   const endDate = document.getElementById('endDate').value;
@@ -304,21 +229,7 @@ const fetchSchedule = async (teamId) => {
   return counter;
 };
 
-const fetchRoster = async (teamId) => {
-  const response = await fetch(`${nhlapi.baseUrl}/teams/${teamId}/roster`);
-  const json = await response.json();
-  return json.roster.sort((a, b) => {
-    const n1 = a.jerseyNumber ? parseInt(a.jerseyNumber, 10) : 100;
-    const n2 = b.jerseyNumber ? parseInt(b.jerseyNumber, 10) : 100;
-    const res = n1 - n2;
-    if (res !== 0) return res;
-    return a.person.fullName
-      .localeCompare(b.person.fullName, 'en', {
-        sensitivity: 'base'
-      });
-  });
-};
-
+//redesign needed but this can be used for the player search function
 const fetchPlayer = async (playerId) => {
   const response = await fetch(`${nhlapi.baseUrl}/people/${playerId}`);
   const json = await response.json();
@@ -385,34 +296,6 @@ const fetchStats = async (playerId, seasonId) => {
     savePercentage,
     shutouts
   };
-};
-
-const formatPlayerOptionText = (player) =>
-  `${player.jerseyNumber || ''} - ${player.person.fullName} (${player.position.abbreviation})`
-
-const onTeamChange = async (e) => {
-  const teamId = e.target.value;
-  const roster = await fetchRoster(teamId);
-  const playerSelect = document.querySelector('select[name="roster"]');
-
-  populateSelect(playerSelect, roster,
-    player => player.person.id,
-    formatPlayerOptionText);
-
-  triggerEvent(playerSelect, 'change');
-};
-
-const onPlayerChange = async (e) => {
-  const seasonSelect = document.querySelector('select[name="season"]');
-  const playerId = e.target.value;
-  const player = await fetchPlayer(playerId);
-  triggerEvent(seasonSelect, 'change');
-};
-
-const onSeasonChange = async (e) => {
-  const playerSelect = document.querySelector('select[name="roster"]');
-  const seasonId = e.target.value;
-  const stats = await fetchStats(playerSelect.value, seasonId);
 };
 
 const onPlayerGamesChange = async (select) => {
@@ -530,6 +413,15 @@ const removePlayer = async(manager, btn) => {
   updateScoreboard();
 }
 
+const loadYahoo = async() => {
+  //first auth yahoo data from user
+  //const response = await fetch(`yapapi.thebeau.ca/auth`);
+  
+  //then popup to select team
+  //load team into my team
+  //assess opponents, load them into drop down -> into new function that will load whatever selected opponent's team
+}
+
 const main = async () => {
   let url = window.location.pathname;
   let xhr = new XMLHttpRequest();
@@ -587,27 +479,9 @@ const main = async () => {
   }
   endDate.value = `${year2}-${month2}-${day2}`;
 
-  populateSeasons(seasonSelect);
-
-  const teams = await fetchTeams();
-
-  populateSelect(teamSelect, teams, team => team.id, team => team.name);
-
-  teamSelect.addEventListener('change', onTeamChange);
-  playerSelect.addEventListener('change', onPlayerChange);
-  seasonSelect.addEventListener('change', onSeasonChange);
-  //startDate.addEventListener('change',);
-  //endDate.addEventListener('change',);
-  
-
-  teamSelect.value = 14;           // Tampa Bay
-  seasonSelect.value = '20222023'; 
-
-
-  triggerEvent(teamSelect, 'change');
-
-  postData('data to process');
+  //if fresh load, enable yahoo load button
+    //load button is pressed, auth flow starts
+  //if redirect, extract code, call get_token on api...
   */
 };
-
 main();
