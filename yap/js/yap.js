@@ -415,7 +415,7 @@ const removePlayer = async(manager, btn) => {
 
 const loadYahoo = async() => {
   //first auth yahoo data from user
-  const response = await fetch(`https://yapapi.thebeau.dev/auth`, {
+  return fetch(`https://yapapi.thebeau.dev/auth`, {
     mode: 'no-cors',
     method: "GET",
   });
