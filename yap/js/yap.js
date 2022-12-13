@@ -415,7 +415,7 @@ const removePlayer = async(manager, btn) => {
 
 const loadYahoo = async() => {
   //first auth yahoo data from user
-  //const response = await fetch(`yapapi.thebeau.ca/auth`);
+  const response = await fetch(`yapapi.thebeau.dev/auth`);
   
   //then popup to select team
   //load team into my team
@@ -425,14 +425,9 @@ const loadYahoo = async() => {
 const main = async () => {
   let url = window.location.pathname;
   let xhr = new XMLHttpRequest();
-  if (url == 'https://thebeau.dev/yap.html'){
-    //yapapi call to auth
-    console.log(xhr.status);
-    console.log('make call to yapapi');
-  } else if (xhr.status == 302) {
-    //get token
-    console.log('get token time');
-  }
+  console.log(url);
+  console.log(xhr.status);
+
 
   /*
   //DATE
