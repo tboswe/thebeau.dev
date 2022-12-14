@@ -429,7 +429,7 @@ async function getToken(){
 
 const main = async () => {
   let xhr = new XMLHttpRequest();
-  console.log(xhr.status);
+  alert(xhr.status);
   if(xhr.status == 0){
     if (window.confirm("Would you like YAP to use Yahoo Fantasy Data?")){
       loadYahoo();
