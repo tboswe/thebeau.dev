@@ -433,9 +433,9 @@ const main = async () => {
   if(xhr.status == 0){
     if (window.confirm("Would you like YAP to use Yahoo Fantasy Data?")){
       loadYahoo();
+    }else if(window.confirm("Would you like YAP to get Token?")){
+      console.log(getToken())
     }
-  }else if(xhr.status == 302){
-    console.log(getToken());
   }
 };
 main();
