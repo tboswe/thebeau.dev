@@ -428,15 +428,14 @@ async function getToken(){
 }
 
 const main = async () => {
-  let xhr = new XMLHttpRequest();
-  alert(xhr.status);
-  if(xhr.status == 0){
+  if(window.location.pathname == 'https://thebeau.dev/yap/yap.html'){
     if (window.confirm("Would you like YAP to use Yahoo Fantasy Data?")){
       loadYahoo();
     }
-    if(window.confirm("Would you like YAP to get Token?")){
-      console.log(getToken())
-    }
   }
+  if(window.confirm("Would you like YAP to get Token?")){
+      console.log(getToken())
+  }
+
 };
 main();
