@@ -422,6 +422,7 @@ async function loadYahoo() {
 async function getToken(){
   let code = window.location.pathname.split('code=')
   code = code[1];
+  console.log(yapapi.baseUrl+'/get_token?code='+code);
   let response = await fetch(yapapi.baseUrl+'/get_token?code='+code, {method:'GET'});
   let data = await response.json();
   return data
