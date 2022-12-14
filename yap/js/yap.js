@@ -4,7 +4,7 @@ const nhlapi = {
 };
 
 const yapapi = {
-  baseUrl: 'https://yapapi.thebeau.ca'
+  baseUrl: 'https://yapapi.thebeau.dev'
 }
 
 //my roster, opponent roster, HAS member array of [player, gamesLeft, avgStats]
@@ -211,11 +211,11 @@ const emptySelect = (select) => {
 
 //requires redesign to accept new parameters, we can keep the nhl api call or see if yahoo can provide the info
 const fetchSchedule = async (teamId) => {
-  const startDate = document.getElementById('startDate').value;
-  const endDate = document.getElementById('endDate').value;
+  let startDate = document.getElementById('startDate').value;
+  let endDate = document.getElementById('endDate').value;
   
-	const response = await fetch(`${nhlapi.baseUrl}/schedule?teamId=${teamId}&startDate=${startDate}&endDate=${endDate}`);
-  const json = await response.json();
+	let response = await fetch(`${nhlapi.baseUrl}/schedule?teamId=${teamId}&startDate=${startDate}&endDate=${endDate}`);
+  let json = await response.json();
 
   let counter = json.totalGames;
   //now we need to scan the json to find the games that already happened or are post poned, which happens in detailedState
@@ -231,9 +231,9 @@ const fetchSchedule = async (teamId) => {
 
 //redesign needed but this can be used for the player search function
 const fetchPlayer = async (playerId) => {
-  const response = await fetch(`${nhlapi.baseUrl}/people/${playerId}`);
-  const json = await response.json();
-  const [player] = json.people;
+  let response = await fetch(`${nhlapi.baseUrl}/people/${playerId}`);
+  let json = await response.json();
+  let [player] = json.people;
   return player;
 };
 
@@ -413,73 +413,28 @@ const removePlayer = async(manager, btn) => {
   updateScoreboard();
 }
 
-const loadYahoo = async() => {
-  //first auth yahoo data from user
-  return fetch(`https://yapapi.thebeau.dev/auth`, {
-    mode: 'no-cors',
-    method: "GET",
-  });
-  
-  //then popup to select team
-  //load team into my team
-  //assess opponents, load them into drop down -> into new function that will load whatever selected opponent's team
+async function loadYahoo() {
+  let response = await fetch(yapapi.baseUrl+'/appcreds', {method: 'GET'});
+  let data = await response.json();
+  window.location.href = `https://api.login.yahoo.com/oauth2/request_auth?client_id=${data.clientid}&redirect_uri=${data.redirect_uri}&response_type=code&language=en-us`;
+}
+
+async function getToken(){
+  let code = window.location.pathname.split('code=')
+  code = code[1];
+  let response = await fetch(yapapi.baseUrl+'/get_token?code='+code, {method:'GET'});
+  let data = await response.json();
+  return data
 }
 
 const main = async () => {
-  let url = window.location.pathname;
   let xhr = new XMLHttpRequest();
-  console.log(url);
-  console.log(xhr.status);
-
-
-  /*
-  //DATE
-  //consider setting drop down with preset weeks to avoid a whole bunch of error trapping
-  //also consider throwing a lot of this in a function
-  const startDate = document.getElementById("startDate");
-  const endDate = document.getElementById("endDate");
-  var year = new Date().getFullYear(), month = new Date().getMonth() + 1, day = new Date().getDate();
-  var year2, month2, day2;
-  //formatting for input
-  if(day < 10){
-    day = `0${day}`;
+  if(xhr.status == 0){
+    if (window.confirm("Would you like YAP to use Yahoo Fantasy Data?")){
+      loadYahoo();
+    }
+  }else if(xhr.status == 302){
+    console.log(getToken());
   }
-  if(month <10){
-    month = `0${month}`;
-  }
-  startDate.value = `${year}-${month}-${day}`;
-  year = Number(year), month = Number(month), day = Number(day); //convert to number for easy math in the handler
-  //endDate handler
-  if(month == 12 && day > 24){
-    year2 = year+1;
-    month2 = month+1;
-    day2=-1*(31-day-6);
-  }else if((month == 01 || month == 03 || month == 05 || month == 07 || month == 08 || month == 10) && day > 24){
-    month2=month+1;
-    day2=(-1*(31-day-6));
-  }else if(month == 02 && day > 21){
-    month2+=1;
-    day2=(-1*(28-day-7));
-  }else if(month == 04 || month == 06 || month == 09 || month == 11 && day >23){
-    month2=month+1;
-    day2=(-1*(30-day-6));
-  }else{
-    day2=day+7;
-    month2 = month;
-    year2 = year;
-  }
-  //format for input
-  if(day2 < 10){
-    day2 = `0${day2}`;
-  }
-  if(month2 <10){
-    month2 = `0${month2}`;
-  }
-  endDate.value = `${year2}-${month2}-${day2}`;
-
-  //if fresh load, enable yahoo load button
-    //load button is pressed, auth flow starts
-  //if redirect, extract code, call get_token on api...
-  */
 };
 main();
