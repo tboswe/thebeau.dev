@@ -414,16 +414,14 @@ const removePlayer = async(manager, btn) => {
 }
 
 async function loadYahoo() {
+  //we need to do this differently to protect the creds
   let response = await fetch(yapapi.baseUrl+'/appcreds', {method: 'GET'});
   let data = await response.json();
   window.location.href = `https://api.login.yahoo.com/oauth2/request_auth?client_id=${data.clientid}&redirect_uri=${data.redirect_uri}&response_type=code&language=en-us`;
 }
 
 async function getToken(){
-  let code = window.location.pathname.split('code=')
-  code = code[1];
-  console.log(yapapi.baseUrl+'/get_token?code='+code);
-  let response = await fetch(yapapi.baseUrl+'/get_token?code='+code, {method:'GET'});
+  let response = await fetch(yapapi.baseUrl+'/get_token?'+window.location.pathname, {method:'GET'});
   let data = await response.json();
   return data
 }
@@ -433,10 +431,8 @@ const main = async () => {
     if (window.confirm("Would you like YAP to use Yahoo Fantasy Data?")){
       loadYahoo();
     }
+  }else{
+    getToken();
   }
-  if(window.confirm("Would you like YAP to get Token?")){
-      console.log(getToken())
-  }
-
 };
 main();
