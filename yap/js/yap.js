@@ -427,12 +427,11 @@ async function getToken(){
 }
 
 const main = async () => {
-  if(window.location.pathname == 'https://thebeau.dev/yap/yap.html'){
-    if (window.confirm("Would you like YAP to use Yahoo Fantasy Data?")){
+    if (window.confirm("Authorize Yahoo?")){
       loadYahoo();
+    }else{
+      alert("Already Authorized...getting token")
+      getToken();
     }
-  }else{
-    getToken();
-  }
 };
 main();
