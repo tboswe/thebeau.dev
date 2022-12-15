@@ -10,7 +10,7 @@ const yapapi = {
 const creds = {
     consumer_key: "dj0yJmk9bVJqTU1ob1F0WEpnJmQ9WVdrOVMwSkVia05RVEVrbWNHbzlNQT09JnM9Y29uc3VtZXJzZWNyZXQmc3Y9MCZ4PTZj",
     consumer_secret: "556577b5e9ece81e03edea4f5baf2b0fdfe432e7",
-    redirect_uri: "https://thebeau.ca/yap/yap.html"
+    redirect_uri: "https://thebeau.dev/yap/yap.html"
  }
 
 //my roster, opponent roster, HAS member array of [player, gamesLeft, avgStats]
