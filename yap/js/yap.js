@@ -415,10 +415,14 @@ const removePlayer = async(manager, btn) => {
 
 async function loadYahoo() {
   //we need to do this differently to protect the creds
-  //let response = await fetch(yapapi.baseUrl+'/appcreds', {method: 'GET'});
-  //let data = await response.json();
-  //window.location.href = `https://api.login.yahoo.com/oauth2/request_auth?client_id=${data.clientid}&redirect_uri=${data.redirect_uri}&response_type=code&language=en-us`;
-  window.location.href = `https://api.login.yahoo.com/oauth2/request_auth?client_id=${creds.consumer_key}&redirect_uri=${creds.redirect_uri}&response_type=code&language=en-us`;
+  let response = await fetch(yapapi.baseUrl+'/get_key', {method: 'GET'});
+  console.log(response)
+  window.location.href = `https://api.login.yahoo.com/oauth2/request_auth?client_id=${response}&redirect_uri=oob&response_type=code&language=en-us`;
+  let auth_code = prompt("Enter code from Yahoo");
+  console.log(auth_code)
+  let token = await fetch(yapapi.baseUrl+'/get_token?auth_code='+auth_code);
+  console.log(token)
+  //window.location.href = `https://api.login.yahoo.com/oauth2/request_auth?client_id=dj0yJmk9bVJqTU1ob1F0WEpnJmQ9WVdrOVMwSkVia05RVEVrbWNHbzlNQT09JnM9Y29uc3VtZXJzZWNyZXQmc3Y9MCZ4PTZj&redirect_uri=oob&response_type=code&language=en-us`;
 }
 
 async function getToken(){
