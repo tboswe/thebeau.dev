@@ -437,7 +437,7 @@ async function getToken(){
   console.log(secret);
   fetch('https://api.login.yahoo.com/oauth2/get_token', {
     method: 'POST',
-    authorization: 'Basic',
+    Authorization: 'Basic',
     secret,
     'content-type': 'application/x-www-form-urlencoded',
     body: `grant_type=authorization_code&redirect_uri=${creds.redirect_uri}&code=${auth_code}`
