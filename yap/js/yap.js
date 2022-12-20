@@ -433,6 +433,7 @@ async function loadYahoo() {
 
 async function getToken(){
   let current_url = window.location.pathname.split('code=');
+  console.log(current_url);
   let auth_code = current_url[1];
   console.log(auth_code);
   let secret = btoa(`${creds.consumer_key}:${creds.consumer_secret}`);
