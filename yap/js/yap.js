@@ -4,7 +4,21 @@ const nhlapi = {
 };
 
 const yapapi = {
-  baseUrl: 'https://yapapi.thebeau.dev'
+  baseUrl: 'https://yapapi.thebeau.dev',
+  testUrl: 'localhost:8000'
+}
+
+const creds = {
+  consumer_key: "dj0yJmk9bVJqTU1ob1F0WEpnJmQ9WVdrOVMwSkVia05RVEVrbWNHbzlNQT09JnM9Y29uc3VtZXJzZWNyZXQmc3Y9MCZ4PTZj",
+  consumer_secret: "556577b5e9ece81e03edea4f5baf2b0fdfe432e7",
+  redirect_uri: "https://thebeau.ca/yap/yap.html"
+}
+
+const token = {
+  access_token: null,
+  token_type: null,
+  expires_in: null,
+  refresh_token: null,
 }
 
 //my roster, opponent roster, HAS member array of [player, gamesLeft, avgStats]
@@ -414,29 +428,36 @@ const removePlayer = async(manager, btn) => {
 }
 
 async function loadYahoo() {
-  //we need to do this differently to protect the creds
-  let response = await fetch(yapapi.baseUrl+'/get_key', {methods: 'GET'});
-  console.log(response)
-  //window.location.href = `https://api.login.yahoo.com/oauth2/request_auth?client_id=${response}&redirect_uri=https://thebeau.dev/yap/yap.html&response_type=code&language=en-us`;
-  //let auth_code = (window.location.pathname.split('code='))[1];
-  //console.log(auth_code)
-  //let token = await fetch(yapapi.baseUrl+'/get_token?auth_code='+auth_code);
-  //console.log(token)
-  //window.location.href = `https://api.login.yahoo.com/oauth2/request_auth?client_id=dj0yJmk9bVJqTU1ob1F0WEpnJmQ9WVdrOVMwSkVia05RVEVrbWNHbzlNQT09JnM9Y29uc3VtZXJzZWNyZXQmc3Y9MCZ4PTZj&redirect_uri=oob&response_type=code&language=en-us`;
+  window.location.href = `https://api.login.yahoo.com/oauth2/request_auth?client_id=${creds.consumer_key}&redirect_uri=${creds.redirect_uri}&response_type=code&language=en-us`;
 }
 
 async function getToken(){
+  let auth_code = window.location.pathname.split('code=')[1];
+  let secret = btoa(`${creds.consumer_key}:${creds.consumer_secret}`);
+  fetch('https://api.login.yahoo.com/oauth2/get_token', {
+    Authorization: 'Basic',
+    secret,
+    'Content-Type': 'application/x-www-form-urlencoded',
+    body: `grant_type=authorization_code&redirect_uri=${creds.redirect_uri}&code=${auth_code}`
+  })
+    .then((response) => response.json())
+    .then((data) => console.log(data));
+
+  console.log(response);
+  console.log(data);
+
   //for testing
-  let auth_code = 'ubvshb2capudqs7937nerkq7bpv7d2h2';
+  
   //let response = await fetch(yapapi.baseUrl+'/get_token?'+'https://thebeau.dev/yap/yap.html'+auth_code, {method:'GET'});
   //let data = await response.json();
   //console.log(data);
+  /*
   let code = window.location.pathname.split('code=')[1];
   console.log(code);
   let response = await fetch(`https://api.login.yahoo.com/oauth2/get_token?client_id=${creds.consumer_key}?client_secret=${creds.consumer_secret}?grant_type=authorization_code?code=${code}+'?redirect_uri=${creds.redirect_uri}`);
   let data = await response.json();
   console.log(data);
-  /*
+
   let response = await fetch(yapapi.baseUrl+'/get_token?'+window.location.pathname, {method:'GET'});
   let data = await response.json();
   return data
