@@ -433,13 +433,16 @@ async function loadYahoo() {
 
 async function getToken(){
   let auth_code = window.location.pathname.split('code=')[1];
+  console.log(auth_code);
   let secret = btoa(`${creds.consumer_key}:${creds.consumer_secret}`);
   console.log(secret);
-  fetch('https://api.login.yahoo.com/oauth2/get_token', {
+  await fetch('https://api.login.yahoo.com/oauth2/get_token', {
     method: 'POST',
-    Authorization: 'Basic',
-    secret,
-    'content-type': 'application/x-www-form-urlencoded',
+    headers: {
+      'Authorization': 'Basic',
+      secret,
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
     body: `grant_type=authorization_code&redirect_uri=${creds.redirect_uri}&code=${auth_code}`
   })
     .then((response) => response.json())
