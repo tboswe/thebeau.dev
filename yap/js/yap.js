@@ -432,6 +432,7 @@ async function loadYahoo() {
 }
 
 async function getToken(){
+  console.log(window.location.pathname);
   let current_url = window.location.pathname.split('code=');
   console.log(current_url);
   let auth_code = current_url[1];
