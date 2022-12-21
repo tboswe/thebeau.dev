@@ -442,8 +442,7 @@ async function getToken(){
   await fetch('https://api.login.yahoo.com/oauth2/get_token', {
     method: 'POST',
     headers: {
-      'Authorization': 'Basic',
-      secret,
+      'Authorization': `Basic ${secret}`,
       'Content-Type': 'application/x-www-form-urlencoded',
     },
     body: `grant_type=authorization_code&redirect_uri=${creds.encoded_redirect_uri}&code=${auth_code}`
