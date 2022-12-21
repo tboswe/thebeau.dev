@@ -1,17 +1,18 @@
 //default nhl api address
 const nhlapi = {
-  baseUrl: 'https://statsapi.web.nhl.com/api/v1'
+  baseUrl: 'https://statsapi.web.nhl.com/api/v1',
 };
 
 const yapapi = {
   baseUrl: 'https://yapapi.thebeau.dev',
-  testUrl: 'localhost:8000'
+  testUrl: 'localhost:8000',
 }
 
 const creds = {
   consumer_key: "dj0yJmk9bVJqTU1ob1F0WEpnJmQ9WVdrOVMwSkVia05RVEVrbWNHbzlNQT09JnM9Y29uc3VtZXJzZWNyZXQmc3Y9MCZ4PTZj",
   consumer_secret: "556577b5e9ece81e03edea4f5baf2b0fdfe432e7",
-  redirect_uri: "https://thebeau.dev/yap/yap.html"
+  redirect_uri: "https://thebeau.dev/yap/yap.html",
+  encoded_redirect_uri: "https%3A%2F%2Fthebeau.dev/yap/yap.html",
 }
 
 const token = {
@@ -445,7 +446,7 @@ async function getToken(){
       secret,
       'Content-Type': 'application/x-www-form-urlencoded',
     },
-    body: `grant_type=authorization_code&redirect_uri=${creds.redirect_uri}&code=${auth_code}`
+    body: `grant_type=authorization_code&redirect_uri=${creds.encoded_redirect_uri}&code=${auth_code}`
   })
     .then((response) => response.json())
     .then((data) => console.log(data));
